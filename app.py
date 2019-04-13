@@ -74,6 +74,11 @@ def get_playlists():
     )
     return render_template("playlists.html", playlists=playlists)
 
+@app.route("/counter")
+def counter():
+    m = db_session.query(counter).first()
+    return m
+
 
 if __name__ == "__main__":
     app.run(debug=False)
