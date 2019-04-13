@@ -76,8 +76,8 @@ def get_playlists():
 
 @app.route("/counter")
 def counter():
-    m = db_session.query(counter)
-    return str(m)
+    m = db_session.query(counter.count)
+    return json(m)
 
 if __name__ == "__main__":
     app.run(debug=False)
