@@ -3,6 +3,7 @@ import os
 from flask import Flask, abort, render_template, request, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.sql import exists
 
 import models
 from models import Base
@@ -128,8 +129,12 @@ def artistss():
         content = request.get_json()
         if not 'name' in content:
             abort(400)
+        name = content['name']
+        (ret, ), = db_session.query(exists().where(models.Artist.name==name))
+        if(ret == True):
+            abort(400)
         newArtist = models.Artist()
-        newArtist.name = content['name']
+        newArtist.name = name
         db_session.add(newArtist)
         db_session.commit()
         added = db_session.query(models.Artist).order_by(models.Artist.artist_id.desc()).first()
