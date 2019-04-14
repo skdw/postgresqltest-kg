@@ -81,5 +81,24 @@ def counter():
     db_session.commit()
     return str(c.count)
 
+@app.route("/longest_tracks")
+def longest_tracks():
+    lt = db_session.query(models.Track).order_by(models.Track.milliseconds.desc()).limit(10)
+    tracks = []
+    for l in lt:
+        thisdict =	{
+            "album_id": str(l.album_id),
+            "bytes": str(l.bytes),
+            "composer": str(l.composer),
+            "genre_id": str(l.genre_id),
+            "media_type_id": str(l.media_type_id),
+            "milliseconds": str(l.milliseconds),
+            "name": str(l.name),
+            "track_id": str(l.track_id),
+            "unit_price": str(l.unit_price)
+        }
+        tracks.append(thisdict)
+    return str(tracks)
+
 if __name__ == "__main__":
     app.run(debug=False)
