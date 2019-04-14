@@ -151,6 +151,8 @@ def artistss():
         dic = list(i.keys())
         for di in dic:
             i[di] = str(i[di])
+    if result_dict[0] is None:
+        abort(400)
     return jsonify(result_dict[0])
 
 if __name__ == "__main__":
