@@ -138,7 +138,7 @@ def artistss():
         db_session.add(newArtist)
         db_session.commit()
         added = db_session.query(models.Artist).order_by(models.Artist.artist_id.desc()).first()
-        d = {'artist_id': added.artist_id, 'name': added.name}
+        d = {'artist_id': str(added.artist_id), 'name': str(added.name)}
         return jsonify(d)
     abort(400)
 
