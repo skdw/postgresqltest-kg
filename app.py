@@ -100,5 +100,27 @@ def longest_tracks():
         tracks.append(thisdict)
     return jsonify(tracks)
 
+@app.route("/longest_tracks_by_artist")
+def longest_tracks_by_artist():
+    artist = request.args.get('artist')
+    lt_byartist = db_session.query(models.Track).join(models.Album).join(models.Artist).filter(models.Artist.name == artist).order_by(models.Track.milliseconds.desc()).limit(10)
+    tracks = []
+    for l in lt_byartist:
+        thisdict =	{
+            "album_id": str(l.album_id),
+            "bytes": str(l.bytes),
+            "composer": str(l.composer),
+            "genre_id": str(l.genre_id),
+            "media_type_id": str(l.media_type_id),
+            "milliseconds": str(l.milliseconds),
+            "name": str(l.name),
+            "track_id": str(l.track_id),
+            "unit_price": str(l.unit_price)
+        }
+        tracks.append(thisdict)
+    if tracks == []:
+        abort(404)
+    return jsonify(tracks)
+
 if __name__ == "__main__":
     app.run(debug=False)
