@@ -141,3 +141,8 @@ t_playlist_track = Table(
     Column('playlist_id', ForeignKey('playlist.playlist_id'), primary_key=True, nullable=False),
     Column('track_id', ForeignKey('track.track_id'), primary_key=True, nullable=False, index=True)
 )
+
+class Counter(Base):
+    __tablename__ = 'counter'
+
+    count = Column(Integer, primary_key=True, server_default=text("nextval('counter_count_seq'::regclass)"))
