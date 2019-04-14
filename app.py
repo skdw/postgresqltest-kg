@@ -130,6 +130,8 @@ def artistss():
         if not 'name' in content:
             abort(400)
         newname = content['name']
+        if newname is None:
+            abort(400)
         (ret, ), = db_session.query(exists().where(models.Artist.name==newname))
         if(ret == True):
             abort(400)
