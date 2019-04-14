@@ -129,17 +129,23 @@ def artistss():
         content = request.get_json()
         if not 'name' in content:
             abort(400)
-        name = content['name']
-        (ret, ), = db_session.query(exists().where(models.Artist.name==name))
+        newname = content['name']
+        (ret, ), = db_session.query(exists().where(models.Artist.name==newname))
         if(ret == True):
             abort(400)
-        newArtist = models.Artist()
-        newArtist.name = name
+        newArtist = models.Artist(name = newname)
         db_session.add(newArtist)
         db_session.commit()
         added = db_session.query(models.Artist).order_by(models.Artist.artist_id.desc()).first()
-        d = {'artist_id': str(added.artist_id), 'name': str(added.name)}
-        return jsonify(d)
+        result_dict = []
+        result_dict.append(added.__dict__)
+        print(result_dict)
+        for i in result_dict:
+            del i['_sa_instance_state']
+            dic = list(i.keys())
+            for di in dic:
+                i[di] = str(i[di])
+        return jsonify(result_dict[0])
     abort(400)
 
 if __name__ == "__main__":
