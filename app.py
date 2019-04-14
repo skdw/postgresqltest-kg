@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, abort, render_template, request, json
+from flask import Flask, abort, render_template, request, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
@@ -98,7 +98,7 @@ def longest_tracks():
             "unit_price": str(l.unit_price)
         }
         tracks.append(thisdict)
-    return json(tracks)
+    return jsonify(tracks)
 
 if __name__ == "__main__":
     app.run(debug=False)
