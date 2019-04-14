@@ -122,5 +122,20 @@ def longest_tracks_by_artist():
         abort(404)
     return jsonify(tracks)
 
+@app.route("/artists", methods=['POST', 'GET'])
+def artistss():
+    if(request.is_json):
+        content = request.get_json()
+        if not 'name' in content:
+            abort(400)
+        newArtist = models.Artist()
+        newArtist.name = content['name']
+        db_session.add(newArtist)
+        db_session.commit()
+        added = db_session.query(models.Artist).order_by(models.Artist.artist_id.desc()).first()
+        d = {'artist_id': added.artist_id, 'name': added.name}
+        return jsonify(d)
+    abort(400)
+
 if __name__ == "__main__":
     app.run(debug=False)
