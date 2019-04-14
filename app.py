@@ -126,18 +126,18 @@ def longest_tracks_by_artist():
 @app.route("/artists", methods=['POST', 'GET'])
 def artistss():
     if(request.is_json):
-        content = request.get_json()
-        if not 'name' in content:
+        content = request.json
+        newName = content.get("name")
+        if newName is None:
             abort(400)
-        newname = content['name']
-        if newname is None:
-            abort(400)
-        (ret, ), = db_session.query(exists().where(models.Artist.name==newname))
+        (ret, ), = db_session.query(exists().where(models.Artist.name==newName))
         if(ret == True):
             abort(400)
-        newArtist = models.Artist(name = newname)
+
+        newArtist = models.Artist(name = newName)
         db_session.add(newArtist)
         db_session.commit()
+
         added = db_session.query(models.Artist).order_by(models.Artist.artist_id.desc()).first()
         result_dict = []
         result_dict.append(added.__dict__)
